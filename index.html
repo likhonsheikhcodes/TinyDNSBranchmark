@@ -1,198 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="TinyDNS - Advanced, automated DNS benchmarking with real-time animations. Find the best DNS servers and optimize your internet connection.">
-  <meta name="keywords" content="DNS Benchmark, Auto Test DNS, Network Tools, Fast DNS, TinyDNS, Internet Optimization">
-  <meta name="author" content="TinyDNS">
-  <title>TinyDNS - Automated DNS Benchmark</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-    }
-    .navbar {
-      background-color: #343a40;
-    }
-    .navbar-brand {
-      font-size: 1.5rem;
-      color: #ffffff;
-    }
-    .progress-bar {
-      transition: width 0.4s ease-in-out;
-    }
-    #results {
-      display: none;
-    }
-    #loading {
-      display: none;
-      text-align: center;
-    }
-    .footer {
-      background-color: #343a40;
-      color: #ffffff;
-      text-align: center;
-      padding: 20px 0;
-      margin-top: 50px;
-    }
-    .footer a {
-      color: #ffffff;
-      text-decoration: none;
-    }
-    .footer a:hover {
-      text-decoration: underline;
-    }
-    .custom-checkbox {
-      margin-right: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyDNS Pro - Ultimate Network Performance</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@1.6.3/dist/flowbite.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --secondary-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        .live-log {
+            background-color: #0a192f;
+            color: #64ffda;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
 </head>
-<body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#">TinyDNS</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+<body class="min-h-screen flex flex-col">
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600">
+                <i class="fas fa-network-wired mr-2"></i>TinyDNS Pro
+            </a>
+            <div class="space-x-4">
+                <a href="#" class="text-gray-600 hover:text-blue-600">Dashboard</a>
+                <a href="#" class="text-gray-600 hover:text-blue-600">Advanced Tests</a>
+                <a href="#" class="text-gray-600 hover:text-blue-600">Diagnostics</a>
+            </div>
+        </div>
+    </nav>
 
-  <!-- Main Content -->
-  <div class="container mt-5">
-    <h1 class="text-center mb-4">TinyDNS - Automated DNS Benchmark</h1>
-    <p class="text-center">Automatically fetch and test DNS servers to find the fastest one for your network.</p>
+    <main class="flex-grow container mx-auto px-4 py-8 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- System Info Card -->
+            <div class="glass-card p-6">
+                <h3 class="text-xl font-semibold mb-4">Network Diagnostics</h3>
+                <div id="systemInfo" class="space-y-3">
+                    <div class="flex justify-between">
+                        <span>IP Address</span>
+                        <span id="userIP" class="font-medium">Detecting...</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Location</span>
+                        <span id="geoLocation" class="font-medium">Scanning...</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Network Type</span>
+                        <span id="networkType" class="font-medium">Analyzing...</span>
+                    </div>
+                </div>
+            </div>
 
-    <!-- User Customization -->
-    <div class="card p-4 mb-4">
-      <h5>Customize Your Test</h5>
-      <div class="form-check custom-checkbox">
-        <input class="form-check-input" type="checkbox" id="customDNS" onchange="toggleCustomDNS()">
-        <label class="form-check-label" for="customDNS">
-          Use Custom DNS Servers
-        </label>
-      </div>
-      <div id="customDNSInput" style="display: none;">
-        <textarea class="form-control mt-2" id="dnsList" placeholder="Enter DNS servers, one per line"></textarea>
-      </div>
-      <button class="btn btn-primary mt-3" onclick="startBenchmark()">Start Benchmark</button>
-    </div>
+            <!-- DNS Configuration -->
+            <div class="glass-card p-6">
+                <h3 class="text-xl font-semibold mb-4">DNS Performance Test</h3>
+                <div class="space-y-4">
+                    <select id="testType" class="w-full p-2 border rounded">
+                        <option>Global Performance Test</option>
+                        <option>Security Benchmark</option>
+                        <option>Regional Latency</option>
+                    </select>
+                    <textarea id="customDNS" rows="4" class="w-full p-2 border rounded" placeholder="Custom DNS servers (optional)"></textarea>
+                    <button onclick="startAdvancedTest()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+                        Start Advanced Benchmark
+                    </button>
+                </div>
+            </div>
 
-    <!-- Progress Bar -->
-    <div id="loading" class="mb-4">
-      <div class="spinner-border text-primary" role="status"></div>
-      <p>Testing DNS servers...</p>
-    </div>
+            <!-- Live Network Metrics -->
+            <div class="glass-card p-6">
+                <h3 class="text-xl font-semibold mb-4">Live Network Metrics</h3>
+                <div id="liveMetrics" class="space-y-3">
+                    <div class="flex justify-between">
+                        <span>Ping Latency</span>
+                        <span id="pingLatency" class="font-medium">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Download Speed</span>
+                        <span id="downloadSpeed" class="font-medium">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Upload Speed</span>
+                        <span id="uploadSpeed" class="font-medium">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <!-- DNS Benchmark Results -->
-    <div id="results" class="card p-4">
-      <h5>Benchmark Results</h5>
-      <canvas id="dnsChart"></canvas>
-      <p id="recommendation" class="mt-3"></p>
-      <p><strong>Fastest DNS:</strong> <span id="fastest-dns"></span></p>
-    </div>
-  </div>
+        <!-- Live Logs & Results -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-card p-6">
+                <h3 class="text-xl font-semibold mb-4">Live Test Logs</h3>
+                <div id="liveLogs" class="live-log h-64 overflow-y-auto p-3 rounded text-sm"></div>
+            </div>
+            <div id="resultsSection" class="glass-card p-6 hidden">
+                <h3 class="text-xl font-semibold mb-4">Benchmark Results</h3>
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+    </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <p>Powered by <a href="https://t.me/likhonsheikh" target="_blank">t.me/likhonsheikh</a> | Made with ❤️</p>
-  </footer>
+    <footer class="bg-white shadow-md py-6">
+        <div class="container mx-auto text-center">
+            © 2024 TinyDNS Pro | Network Performance Platform
+        </div>
+    </footer>
 
-  <!-- JavaScript -->
-  <script>
-    const defaultDNSListUrl = "https://raw.githubusercontent.com/neargle/public-dns-list/refs/heads/master/all.txt";
-    let results = [];
-    let customDNSList = [];
+    <script>
+        const DNS_SERVERS = [
+            '1.1.1.1', // Cloudflare
+            '8.8.8.8', // Google
+            '9.9.9.9', // Quad9
+            '208.67.222.222', // OpenDNS
+            '76.76.19.19' // Alternate DNS
+        ];
 
-    function toggleCustomDNS() {
-      const customDNSInput = document.getElementById('customDNSInput');
-      customDNSInput.style.display = document.getElementById('customDNS').checked ? 'block' : 'none';
-    }
+        function log(message, type = 'info') {
+            const logsElement = document.getElementById('liveLogs');
+            const logEntry = document.createElement('div');
+            logEntry.classList.add(
+                type === 'error' ? 'text-red-400' : 'text-green-400',
+                'mb-1'
+            );
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logsElement.appendChild(logEntry);
+            logsElement.scrollTop = logsElement.scrollHeight;
+        }
 
-    async function fetchDNSList(url) {
-      document.getElementById('loading').style.display = 'block';
-      try {
-        const response = await fetch(url);
-        const data = await response.text();
-        return data.split('\n').filter(line => line.trim() !== '');
-      } catch (error) {
-        alert('Failed to fetch DNS list. Please try again later.');
-        console.error(error);
-        return [];
-      }
-    }
+        async function detectNetworkInfo() {
+            try {
+                const [ipResponse, geoResponse] = await Promise.all([
+                    axios.get('https://api.ipify.org?format=json'),
+                    axios.get('https://ipapi.co/json/')
+                ]);
 
-    async function testDNS(dns) {
-      // Simulate a latency test (replace with real latency testing logic)
-      return new Promise(resolve => setTimeout(() => resolve(Math.random() * 100 + 20), 500));
-    }
+                document.getElementById('userIP').textContent = ipResponse.data.ip;
+                document.getElementById('geoLocation').textContent =
+                    `${geoResponse.data.city}, ${geoResponse.data.country_name}`;
+                document.getElementById('networkType').textContent =
+                    navigator.connection ? navigator.connection.effectiveType : 'Unknown';
+            } catch (error) {
+                log('Network detection failed', 'error');
+            }
+        }
 
-    function updateProgress(percent) {
-      const progressBar = document.querySelector('.progress-bar');
-      if (progressBar) progressBar.style.width = `${percent}%`;
-    }
+        async function testDNSLatency(server) {
+            const startTime = performance.now();
+            try {
+                await fetch(`https://${server}/dns-query`, { timeout: 3000 });
+                const endTime = performance.now();
+                return endTime - startTime;
+            } catch (error) {
+                log(`DNS Test Failed: ${server}`, 'error');
+                return null;
+            }
+        }
 
-    function displayResults() {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('results').style.display = 'block';
+        async function startAdvancedTest() {
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.classList.remove('hidden');
 
-      results.sort((a, b) => a.latency - b.latency);
-      const ctx = document.getElementById('dnsChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: results.map(r => r.dns),
-          datasets: [{
-            label: 'Latency (ms)',
-            data: results.map(r => r.latency),
-            backgroundColor: 'rgba(0, 123, 255, 0.7)'
-          }]
-        },
-        options: { responsive: true }
-      });
+            const customServers = document.getElementById('customDNS').value.split('\n').filter(Boolean);
+            const serversToTest = customServers.length > 0 ? customServers : DNS_SERVERS;
 
-      document.getElementById('fastest-dns').textContent = results[0].dns;
-      document.getElementById('recommendation').textContent = `Recommended DNS Server: ${results[0].dns} (Latency: ${results[0].latency.toFixed(2)} ms)`;
-    }
+            log(`Starting benchmark for ${serversToTest.length} DNS servers`);
 
-    async function startBenchmark() {
-      results = [];
-      let dnsServers = [];
+            const results = await Promise.all(
+                serversToTest.map(async (server) => {
+                    log(`Testing DNS Server: ${server}`);
+                    const latency = await testDNSLatency(server);
+                    return {
+                        server,
+                        latency: latency !== null ? latency : 9999
+                    };
+                })
+            );
 
-      if (document.getElementById('customDNS').checked) {
-        const customDNSInput = document.getElementById('dnsList').value;
-        customDNSList = customDNSInput.split('\n').filter(line => line.trim() !== '');
-        dnsServers = customDNSList;
-      } else {
-        dnsServers = await fetchDNSList(defaultDNSListUrl);
-      }
+            renderResults(results);
+        }
 
-      for (let i = 0; i < Math.min(dnsServers.length, 20); i++) { // Limit to 20 DNS for demo
-        const dns = dnsServers[i];
-        const latency = await testDNS(dns.trim());
-        results.push({ dns, latency });
-        updateProgress((i + 1) / Math.min(dnsServers.length, 20) * 100);
-      }
+        function renderResults(results) {
+            const sortedResults = results.sort((a, b) => a.latency - b.latency);
+            const ctx = document.getElementById('performanceChart').getContext('2d');
 
-      displayResults();
-    }
-  </script>
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedResults.map(r => r.server),
+                    datasets: [{
+                        label: 'DNS Latency (ms)',
+                        data: sortedResults.map(r => r.latency),
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Latency (ms)' }
+                        }
+                    }
+                }
+            });
+
+            log('Benchmark completed successfully!');
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            detectNetworkInfo();
+        });
+    </script>
 </body>
 </html>
